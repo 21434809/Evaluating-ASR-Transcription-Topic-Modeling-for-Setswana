@@ -1,0 +1,32 @@
+from transformers import AutoTokenizer, AutoModel
+import torch
+
+tokenizer = AutoTokenizer.from_pretrained("dsfsi/puoberta-base")
+model = AutoModel.from_pretrained("dsfsi/puoberta-base")
+
+def split_sentences(text, max_length=30):
+    tokens = tokenizer.tokenize(text)
+    sentences = []
+    current = []
+
+    for token in tokens:
+        current.append(token)
+        if len(current) >= max_length or token in ['ke', 'mme', 'fa', 'jalo', 'le', 'ya', 'a', 'go', 'e']:
+            sentences.append(tokenizer.convert_tokens_to_string(current).replace(" ##", "").strip())
+            current = []
+
+    if current:
+        sentences.append(tokenizer.convert_tokens_to_string(current).replace(" ##", "").strip())
+
+    return sentences
+
+# Example transcription
+raw_text = """
+eketshedimosetso ya kowid  oitlisediwa ke motswedinya fem konka bokamosoeeponso a koruke moretsiwa botsafa komofartatlenke a bona potsweki ya moentolee go tswalelapele ka botshelojwa gago fa o fetsa go tlhaba a motho wa kgona go dira sa tlwasingo s dira jaka go ikad aka gongwefela famothoa fetsa go thabaa emon a ka ritgoremu ento o na le ditlamorago tetsetsetse malwa pe dilenpeng okaupua ke tlhogo oka ukwekaremnele o botlhoko oka  oka uka botlhupgape fo o tlhadilenpeng tetey lo yal okaupu a tsatidilokau twatiphogo ki binki ditshipo kapa ditamorago te ditsa moento mme baitan e sa ga baiti gore ke pefeng tee o tlo dibonang weena mmongwe le mongwe a tlo dibonang morago ga a entiwa nne geraiti gore e ga ukuta otutoto nasentla mo mmelen topatapa ukuta ekare o lapila uta pone e kare o na le ntlhikela o ferogadibete o puekitlhogo kapammelwago e kare o na le  bokozanyanakapa  nsa e botlhoku gore uuketle  ba ko anta of disiase a disiase kontrol and presention sds ba   baraesi batsho goreko a gore o bona gore o phene e uketlile mo g itapoletentata totagoo le motho o ratangwya leko dijun mne go na lidipatlisisa gapee dilenkoni england jornal of medisine ke di bwang gore e bat ba ba kra moento wa faeda ba ka bona gore ga ba kra lemaola bobedi e ba ka kra dika moraged e di e di lenkodine go phala ka moento wa ntlha mme hagu ga go buuitsela gore ana go ka itapolisa ka go ekasesa kapa gautwetse g itila mo mmelen okaokao ana o o ka kgonwetsa moragwale  mentowa bobedi mme ba baisanapekanakoye emgon ba bona gore go tswa mo mmele motgore okaetayan tetse botlhoka ke gore re te gopola tata tsata re lebelefe djuug dimi ka bontidimong e di gupwalegile dika mogare ne raiti gore o ki rea thirele tokapamo ente o humolelwa gobe kamo mmelengwaga kapa go fireletsa kamano ya kohid  moragwa bepehepen mme kge ke soneso o tshenne ui  batbanaganeka tsone gore otlobobwe fe kamogare  ko baitira er tlegadithitoo eti  gare ari gaosiana kapagaokima o ka kgonod o thelogatithutoo lipayalo ne raike gore tikimtseditsithetse dibeile dithulaganyota go bontlha o ta go khusa gore motho a sa kgonao a thatagodie kotla ya ka gore kgadiletle lebatshobabatli gotlale ha ga bathgabaleklele go dirisa ditaulo ka bona ba dirisa  dit utabol ke gore ke  dithisupheiphatse o d o dilatlha mmoragogao didiritsa go nnega go batlialo botshano o tle ka lebotelola go nametsu o ka senenetsi kwe dipompong dja ka nerenwa ni npilegaeke gore falathena zuitlhakomele thata thata nne ophepafate le njiny yo yotlhe e o ka ibirisaka gonne dijini kapal e dilepedintta goreu uutaplefeneamelen dikamo gare go botlhoka gore o bona gore lee lefelenlo  yankopeng lle na le dithulaganyeketotle go hirelefa thetego ya mo gare ona thwene go thethahajie mijhiniyo yotle morago ke le uderisa le morago gao u dirisa ee go batlega dileteyalo nne e kgapele baitanapegakibua le bona bare go botlhokwa yapabone ba bona gore o ka mpewa enela betepepedijeu difete gonne o bona gore o nalithirelepo ya mo ento kyaakaribua ake gore tshonne oeme bekete dteo nne ke gore fela ke leanole beisanape ba bamba lebono gore lekaphuta gore gwatlhaoganya gore kot ya go hatsega moo  go tinang   mmo go talegileg go ka nago ko ko dimo go phala ga o le kwanitle ka paga o sekoo yonedini e mme go nne dijim kapadi tonefe di bitandi fitness senters tpe dimpi sete dibone gore  sefe dinale dithulaganyo te di thisang goisakopi ya go tshwatsega mo mafelong a bonekotlatsi go botlhooka mne gapelwenaut okomelennee meisaanapelidinyatata tisilen le tsone bare fela gaokaemabepe pepei re o bone gore otlobo o na le thireleto kenne okebeikirile komo enton e sengoro go na le sepe fesmomo enton tetherin o faya moragoga mala siamabedi enadika moragope ke gore fela gore e uite koti ya go phaega kotlahethata  go bona gore o bona goru u intehhentle mme gape ga golebeli e ga esanapebabangwa lebelete gore go dira galang mare momasatun a nkha n yetsetseba tiditang low ntlen tit ekesise igro o ka themasemakwa ntle emne o saeta diletsediti o ka itapolesa mmele yeetsa gao le motlho etanbediyoo ka diphilathit ke panatsooka dietang  le go bereka muntlu gore leoneke ka mokgwa o ka bonang mmene e bare hih intensiti le mmoderate intensiti ke gore go thanalo go kuka ditipi e go go siana gotanabaefikele go fwina ego go go sapa seneme le diuetse yalete e ledi kodimopeditirisang maatla thata o ka ena go tlela o bone ed dikota kapadisamoragotamo entlo di lekotla sepele gonne gao batle e  bona goro oka o ka ijapitsha monneleng o hatsipindi e ja moragopete ke wena jaka motho uhwedibonang a ka re bona gor gadishwa mmmo rona babokemme gape e monsese botlhokwasethenere fe gopolek gore ka nako eyana e thenerithokomela ga re bela koo dletetshanayeboddin o thenere rale re ere samaeka melao ele nkenkwe didin rerwaledimdimaaki re phepafaja a ka ntekidia kgape tsese botlhakake gore e resa rela dimaaki gonne a tla gantoo o o ekasasayanammele wa lapa o bono gore o u nna tsintlekamate gonne o ka thatabathe babang o tsa itilwena gore a na o thatahi gokwegala ralebogatlhe ke potsweeleng gore e ne e tshwantse e botswe re tlhaloganyye sentle ka gore motho ba tla go itsi gore botsholo botswalapele kamkho ke botlwtsinkaten na fela fa morao ga go tlhaba na ga go enta yano ra lebogapontor le bogidethataaka tsherimosetse eo ke tshepafa moretsi au zilesentle e bila go tlhaloga ntseretlauisalana gape ka moso ego leboga nna emon lethaletentle le baretibahaleki dankibaya meponsopilanemme ga dikangwa tsa polo a rebamo dinakonka tsa kowid masomaabe le borobongpele gaura borobongwe ke nakwa ditlhogotsa digantsa ura ya borobongwe
+"""
+
+split = split_sentences(raw_text)
+
+# Save or print
+for i, sentence in enumerate(split, 1):
+    print(f"{i}. {sentence}")
