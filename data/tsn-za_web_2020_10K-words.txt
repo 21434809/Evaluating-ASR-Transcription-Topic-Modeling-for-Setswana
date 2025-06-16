@@ -21588,3 +21588,4 @@
 21663	‘tshelammogo’	1
 21664	‘tshenyo’	1
 21665	‘vaalbos’	1
+21666	‘kowid’		1
