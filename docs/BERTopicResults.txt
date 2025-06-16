@@ -1,0 +1,2 @@
+BERTopic Coherence (UMass): -0.9847167726146742
+BERTopic Coherence (NPMI): -0.027028145846436955

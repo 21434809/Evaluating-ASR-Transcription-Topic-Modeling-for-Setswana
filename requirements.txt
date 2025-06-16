@@ -8,3 +8,6 @@ nltk
 torch
 transformers
 jupyter
+bertopic
+wordcloud
+sentence-transformers
